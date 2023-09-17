@@ -17,12 +17,12 @@ def train_preprocess(input_path, save_path):
     os.makedirs(os.path.join(save_path, 'train_out'), exist_ok=True)
 
     transform_1 = transforms.Resize((64, 64))
-    transform_2 = transforms.RandomErasing(p=1,scale=(0.1, 0.3))
+    transform_2 = transforms.RandomErasing(p=1, scale=(0.1, 0.3))
 
     image = Image.open(input_path)
 
-    transformed_image_1 = transform_1(image)
-    transformed_image_2 = transform_2(transformed_image_1)
+    transformed_image_1 = transform_1(image).convert('RGB')
+    transformed_image_2 = transform_2(transformed_image_1).convert('RGB')
 
     transformed_image_1.save(os.path.join(save_path, 'train_out', os.path.basename(input_path)))
     transformed_image_2.save(os.path.join(save_path, 'train_in', os.path.basename(input_path)))
@@ -33,13 +33,13 @@ def test_preprocess(input_path, save_path):
 
     image = Image.open(input_path)
     height, width = image.size
-    width, height = (width // 128 * 32, height // 128 * 32 )
+    width, height = (width // 128 * 32, height // 128 * 32)
 
     transform_1 = transforms.Resize((width, height))
-    transform_2 = transforms.RandomErasing(p=1,scale=(0.1, 0.3))
+    transform_2 = transforms.RandomErasing(p=1, scale=(0.1, 0.3))
 
-    transformed_image_1 = transform_1(image)
-    transformed_image_2 = transform_2(transformed_image_1)
+    transformed_image_1 = transform_1(image).convert('RGB')
+    transformed_image_2 = transform_2(transformed_image_1).convert('RGB')
 
     transformed_image_1.save(os.path.join(save_path, 'test_out', os.path.basename(input_path)))
     transformed_image_2.save(os.path.join(save_path, 'test_in', os.path.basename(input_path)))

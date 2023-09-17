@@ -18,7 +18,7 @@ def lnl1_metric(prediction, target):
     max = torch.maximum(prediction, target) + 1e-3 * torch.ones_like(prediction)
     norm1 = torch.absolute(prediction - target)
     normalize_norm1 = torch.mean(torch.mul(norm1, max.pow(-1)))
-    lnl1_value = -10*torch.log10(normalize_norm1)
+    lnl1_value = -20*torch.log10(normalize_norm1)
 
     return lnl1_value
 
@@ -36,7 +36,7 @@ def PSNR_SSIM_LNL1_loss(prediction, target):
 
     lnl1_loss = -lnl1_metric(prediction, target)
 
-    return psnr_loss + 20 * ssim_loss + 2 * lnl1_loss
+    return psnr_loss + 20 * ssim_loss + lnl1_loss
 
 train_input_root_dir = 'data/DIV2K_train_HR/train_in'
 train_output_root_dir = 'data/DIV2K_train_HR/train_out'
@@ -46,7 +46,7 @@ test_output_root_dir = 'data/DIV2K_valid_HR/test_out'
 # Define hyperparameters
 batch_size = 50
 learning_rate = 0.0005
-epochs = 50
+epochs = 200
 
 # Initialize the generator and discriminator
 generator = EfficientNetGenerator()
@@ -127,9 +127,10 @@ for epoch in range(epoch, epochs):
     # Wrap train_loader with tqdm for progress bar
     for batch_idx, (real_images_input, real_images_output) in enumerate(tqdm(train_loader, desc=f"Epoch {epoch + 1}/{epochs}")):
 
+        current_batch_size = real_images_input.shape[0]
+
         # Train Discriminator
         optimizer_D.zero_grad()
-        # real_images_input = torch.where(real_images_input == 0, torch.rand_like(real_images_input), real_images_input)
 
         # Generate fake images from the generator
         fake_images = generator(real_images_input)
@@ -153,8 +154,8 @@ for epoch in range(epoch, epochs):
         running_lnl1 += lnl1_value
 
         # Calculate the loss for real and fake images
-        real_labels = torch.ones(batch_size, 1)
-        fake_labels = torch.zeros(batch_size, 1)
+        real_labels = torch.ones(current_batch_size, 1)
+        fake_labels = torch.zeros(current_batch_size, 1)
         
         output_real = discriminator(real_images_output)
         loss_real = criterion(output_real, real_labels)
