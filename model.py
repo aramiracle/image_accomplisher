@@ -106,7 +106,7 @@ class EfficientNetGenerator(nn.Module):
         )
 
         self.deconv1 = nn.Sequential(
-            nn.ConvTranspose2d(64, 3, kernel_size=4, stride=2, padding=1),
+            nn.ConvTranspose2d(64, 32, kernel_size=4, stride=2, padding=1),
             nn.ReLU(inplace=True)
         )
             
@@ -130,16 +130,18 @@ class EfficientNetGenerator(nn.Module):
     def forward(self, x):
 
         # Extract features from the pre-trained ResNet-50
-        z = self.efficientnet_features(x) #1536x2x2
+        x0 = nn.Upsample((64, 64))(x)
+        
+        z = self.efficientnet_features(x0) #1536x2x2
 
 
         z4 = self.deconv4(z) #256x4x4
         z3 = self.deconv3(z4) #128x8x8
         z2 = self.deconv2(z3) #64x16x16
         z1 = self.deconv1(z2) #3x32x32
-
+        
         #Encoder
-        x1 = self.conv1(x) #32x32x32
+        x1 = self.conv1(x0) #32x32x32
         x2 = self.conv2(x1) #64x16x16
         x3 = self.conv3(x2) #128x8x8
         x4 = self.conv4(x3) #256x4x4
@@ -150,4 +152,6 @@ class EfficientNetGenerator(nn.Module):
         up2 = self.up2(up3 + x2 + z2) #32x32x32
         up1 = self.up1(up2 + x1 + z1) #3x64x64
 
-        return up1
+        output = nn.Upsample((x.shape[2], x.shape[3]))(up1)
+
+        return output

@@ -33,7 +33,7 @@ def test_preprocess(input_path, save_path):
 
     image = Image.open(input_path)
     height, width = image.size
-    width, height = (width // 128 * 32, height // 128 * 32)
+    width, height = (width // 300 * 32, height // 300 * 32)
 
     transform_1 = transforms.Resize((width, height))
     transform_2 = transforms.RandomErasing(p=1, scale=(0.1, 0.3))
