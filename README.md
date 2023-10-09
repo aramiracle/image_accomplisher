@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-The Image Accomplisher Project is a Python-based project for image enhancement using deep learning techniques. It focuses on improving image quality and detail using convolutional neural networks (CNNs). The project offers flexibility in choosing between different generator models and provides custom loss functions for training.
+The Image Accomplisher Project is a Python-based project for image enhancement using deep learning techniques. It focuses on improving image quality and detail using convolutional neural networks (CNNs). In this project, a random part of the input image is erased, and the goal is to reproduce and enhance the erased portion.
 
 ## Project Components
 
