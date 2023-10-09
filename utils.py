@@ -87,7 +87,6 @@ def common_train(train_loader, generator, optimizer, epochs, generated_images_di
             checkpoint = torch.load(checkpoint_path)
             generator.load_state_dict(checkpoint['generator_state_dict'])
             optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-            loss = checkpoint['loss_generator']
 
             generator.train()
 
@@ -145,7 +144,7 @@ def common_train(train_loader, generator, optimizer, epochs, generated_images_di
             if is_pretrain:
                 print(f'Epoch [{epoch + 1}/{epochs}] Batch[{batch_idx + 1}/{len(train_loader)}] Loss: {average_loss:.4f} Metrics: PSNR: {average_psnr:.4f} SSIM: {average_ssim:.4f} VIF: {average_vif:.4f} LNL1: {average_lnl1:.4f}')
                 save_image(torch.cat((fake_images, real_images_input, real_images_output), dim=0), f'{generated_images_dir}/fake_image_epoch{epoch + 1:04d}_batch{batch_idx + 1:02d}.png', nrow=8)
-            elif batch_idx % 5 == 0:
+            elif (batch_idx + 1) % 5 == 0:
                 print(f'Epoch [{epoch + 1}/{epochs}] Batch[{batch_idx + 1}/{len(train_loader)}] Loss: {average_loss:.4f} Metrics: PSNR: {average_psnr:.4f} SSIM: {average_ssim:.4f} VIF: {average_vif:.4f} LNL1: {average_lnl1:.4f}')
                 save_image(torch.cat((fake_images, real_images_input, real_images_output), dim=0), f'{generated_images_dir}/fake_image_epoch{epoch + 1:04d}_batch{batch_idx + 1:02d}.png', nrow=8)
 
@@ -156,7 +155,6 @@ def common_train(train_loader, generator, optimizer, epochs, generated_images_di
         torch.save({
             'generator_state_dict': generator.state_dict(),
             'optimizer_state_dict': optimizer.state_dict(),
-            'loss_generator': loss.item()
         }, save_path)
         print('Model is saved.')
 
