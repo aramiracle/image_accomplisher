@@ -6,7 +6,7 @@ The Image Accomplisher Project is a Python-based project for image enhancement u
 
 ## Dataset
 
-The main dataset used in this project is a combination of images from the [DIV2K dataset](https://data.vision.ee.ethz.ch/cvl/DIV2K/) from ETH Zurich and the [Linnaeus 5 dataset](http://users.isy.liu.se/cvl/datasets/linnaeus5/) for object recognition.
+The main dataset used in this project is a combination of images from the [DIV2K dataset](https://data.vision.ee.ethz.ch/cvl/DIV2K/) from ETH Zurich and the [Linnaeus 5 dataset](http://chaladze.com/l5/) for object recognition.
 
 ## Project Components
 
