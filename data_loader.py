@@ -3,12 +3,13 @@ from torchvision import transforms
 from PIL import Image
 import os
 import torch
+import random
 
 # Define a custom dataset class for image enhancement tasks.
 class ImageEnhancementDataset(Dataset):
     def __init__(self, input_root_dir, output_root_dir, transform=None, train=True):
         """
-        Initialize the ImageEnhancementDataset.
+        Initialize the Image Enhancement Dataset.
 
         Args:
             input_root_dir (str): Path to the directory containing input images.
@@ -29,7 +30,7 @@ class ImageEnhancementDataset(Dataset):
         """Return the number of samples in the dataset."""
         return len(self.input_image_paths)
 
-    def apply_data_augmentation(self, input_image, output_image):
+    def apply_data_augmentation(self, input_image, output_image, idx):
         """
         Apply data augmentation to input and output images.
 
@@ -45,9 +46,8 @@ class ImageEnhancementDataset(Dataset):
         output_image = self.transform(output_image)
 
         if self.train:
-
-            # Color Jitter
-            color_jitter = transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1)
+            # Apply color jitter to enhance training data
+            color_jitter = MyColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1, seed=idx)
             input_image = torch.where(input_image == 0 , input_image, color_jitter(input_image))
             output_image = torch.where(output_image == 0, input_image, color_jitter(output_image))
 
@@ -70,7 +70,7 @@ class ImageEnhancementDataset(Dataset):
         input_image = Image.open(input_img_path).convert('RGB')
         output_image = Image.open(output_img_path).convert('RGB')
 
-        input_image, output_image = self.apply_data_augmentation(input_image, output_image)
+        input_image, output_image = self.apply_data_augmentation(input_image, output_image, idx)
 
         return input_image, output_image
 
@@ -98,3 +98,13 @@ def get_data_loaders(train_input_root_dir, train_output_root_dir, test_input_roo
     test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
 
     return train_loader, test_loader
+
+class MyColorJitter(transforms.ColorJitter):
+    def __init__(self, brightness, contrast, saturation, hue, seed):
+        super().__init__(brightness, contrast, saturation, hue)
+        self.seed = seed
+    
+    def forward(self, img):
+        torch.manual_seed(self.seed)
+        random.seed(self.seed)
+        return super().forward(img)

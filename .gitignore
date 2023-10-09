@@ -2,3 +2,4 @@ data/
 generated_images/
 results/
 __pycache__/
+saved_models/
