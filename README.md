@@ -4,6 +4,10 @@
 
 The Image Accomplisher Project is a Python-based project for image enhancement using deep learning techniques. It focuses on improving image quality and detail using convolutional neural networks (CNNs). In this project, a random part of the input image is erased, and the goal is to reproduce and enhance the erased portion.
 
+## Dataset
+
+The main dataset used in this project is a combination of images from the [DIV2K dataset](https://data.vision.ee.ethz.ch/cvl/DIV2K/) from ETH Zurich and the [Linnaeus 5 dataset](http://users.isy.liu.se/cvl/datasets/linnaeus5/) for object recognition.
+
 ## Project Components
 
 ### Preprocessing (`preprocess.py`)
