@@ -1,5 +1,5 @@
 import torch.optim as optim
-from model import Generator  # Import the EfficientNetGenerator class from your model module
+from model import Generator  # Import the EfficientNetGenerator or Generator class from your model module
 from utils import loading_data, pretrain, train, test  # Import necessary functions from your utils module
 
 # Define data directories
