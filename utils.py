@@ -177,10 +177,9 @@ def pretrain(train_loader, generator, optimizer, epochs, generated_images_dir, c
     common_train(train_loader, generator, optimizer, epochs, generated_images_dir, checkpoint_dir, "", is_pretrain=True)
 
 # Testing function
-def test(test_loader, generator, best_checkpoint_path):
+def test(test_loader, generator, best_checkpoint_path, result_images_dir):
     # Testing loop with tqdm
-    gan_images_dir = 'results/gan'
-    os.makedirs(gan_images_dir, exist_ok=True)
+    os.makedirs(result_images_dir, exist_ok=True)
 
     running_psnr = 0.0
     running_ssim = 0.0
@@ -219,7 +218,7 @@ def test(test_loader, generator, best_checkpoint_path):
 
             # You can save or visualize the generated images as needed
             fake_image = transforms.ToPILImage()(fake_image.squeeze().cpu())
-            fake_image.save(os.path.join(gan_images_dir, f"generated_{batch_idx + 1:04d}.png"))
+            fake_image.save(os.path.join(result_images_dir, f"generated_{batch_idx + 1:04d}.png"))
 
         average_psnr = running_psnr / len(test_loader)
         average_ssim = running_ssim / len(test_loader)

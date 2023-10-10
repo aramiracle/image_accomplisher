@@ -10,12 +10,13 @@ test_output_dir = 'data/DIV2K_valid_HR/test_out'
 generated_images_dir = 'generated_images'
 checkpoint_dir = 'saved_models/unet/'
 best_checkpoint_path = 'saved_models/unet/best_model_checkpoint.pth'
+result_images_dir = 'results/unet'
 
 # Define hyperparameters
-pretrain_epochs = 9800
+pretrain_epochs = 2900
 batch_size = 32
 learning_rate = 1e-3
-final_epochs = 10000
+final_epochs = 3000
 
 # Initialize the generator
 generator = Generator()  # Create an instance of the EfficientNetGenerator
@@ -33,4 +34,4 @@ pretrain(pretrain_loader, generator, optimizer, pretrain_epochs, generated_image
 train(train_loader, generator, optimizer, final_epochs, generated_images_dir, checkpoint_dir, best_checkpoint_path)
 
 # Test the generator
-test(test_loader, generator, best_checkpoint_path)
+test(test_loader, generator, best_checkpoint_path, result_images_dir)
