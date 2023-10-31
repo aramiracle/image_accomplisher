@@ -13,10 +13,10 @@ best_checkpoint_path = 'saved_models/unet/best_model_checkpoint.pth'
 result_images_dir = 'results/unet'
 
 # Define hyperparameters
-pretrain_epochs = 2900
+pretrain_epochs = 4000
 batch_size = 32
 learning_rate = 1e-3
-final_epochs = 3000
+final_epochs = 5000
 
 # Initialize the generator
 generator = Generator()  # Create an instance of the EfficientNetGenerator

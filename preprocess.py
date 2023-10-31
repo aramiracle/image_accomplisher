@@ -19,12 +19,16 @@ def train_preprocess(input_path, save_path):
 
     # Define image transformations
     transform_1 = T.Resize((64, 64))
-    transform_2 = T.RandomErasing(p=1, scale=(0.1, 0.3))
+    transform_2 = T.Compose([
+        T.ToTensor(),
+        T.RandomErasing(p=1, scale=(0.1, 0.3)),
+        T.ToPILImage()
+    ])
 
-    image = Image.open(input_path)
+    image = Image.open(input_path).convert('RGB')
 
-    transformed_image_1 = transform_1(image).convert('RGB')
-    transformed_image_2 = transform_2(transformed_image_1).convert('RGB')
+    transformed_image_1 = transform_1(image)
+    transformed_image_2 = transform_2(transformed_image_1)
 
     # Save the transformed images
     transformed_image_1.save(os.path.join(save_path, 'train_out', os.path.basename(input_path)))
@@ -34,15 +38,19 @@ def test_preprocess(input_path, save_path):
     os.makedirs(os.path.join(save_path, 'test_in'), exist_ok=True)
     os.makedirs(os.path.join(save_path, 'test_out'), exist_ok=True)
 
-    image = Image.open(input_path)
+    image = Image.open(input_path).convert('RGB')
     width, height = (64, 64)
 
     # Define image transformations
     transform_1 = T.Resize((width, height))
-    transform_2 = T.RandomErasing(p=1, scale=(0.1, 0.3))
+    transform_2 = T.Compose([
+        T.ToTensor(),
+        T.RandomErasing(p=1, scale=(0.1, 0.3)),
+        T.ToPILImage()
+    ])
 
-    transformed_image_1 = transform_1(image).convert('RGB')
-    transformed_image_2 = transform_2(transformed_image_1).convert('RGB')
+    transformed_image_1 = transform_1(image)
+    transformed_image_2 = transform_2(transformed_image_1)
 
     # Save the transformed images
     transformed_image_1.save(os.path.join(save_path, 'test_out', os.path.basename(input_path)))
